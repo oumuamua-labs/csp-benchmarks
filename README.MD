@@ -1,5 +1,22 @@
 # Client-Side Proving Benchmarks
 
+> ### This is a fork, and the Hekate numbers in it are not official results
+>
+> This fork adds a [Hekate](https://github.com/oumuamua-labs/hekate) Keccak-256 benchmark
+> (`hekate/`) that upstream does not carry. Upstream accepts only fully open-source systems and
+> Hekate's prover ships as a closed-source signed cdylib, which is why it was declined. That is
+> the reason it lives here rather than there, and it is not a claim that upstream got anything
+> wrong.
+>
+> **The measurements in [`hekate/RESULTS.md`](hekate/RESULTS.md) were taken on an Apple M3 Max
+> (16 cores, 48 GB).** The official results described below and published on ethproofs.org were
+> taken on an AWS `mac2.metal`: Apple M1, 8 cores, 16 GB. **The two sets are not comparable and
+> must not be merged.** Nothing in `results/` was produced by this fork.
+>
+> Everything else in this repository is upstream's work, unmodified except for registering the
+> new crate. See [`hekate/README.md`](hekate/README.md) for what is measured, how to reproduce
+> it, and where the methodology is checkable.
+
 This repository contains benchmarks of zero-knowledge proving systems and zkVMs. The goal is to _continuously_ map the landscape of proving systems that are suitable for client-side environments.
 
 All benchmark results are published on [ethproofs.org](https://ethproofs.org/csp-benchmarks) quarterly, where they are rendered into a user-friendly comparison interface.
