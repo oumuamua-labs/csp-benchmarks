@@ -1,0 +1,29 @@
+[package]
+name = "hekate"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Exact pins: these versions produced the measurements in RESULTS.md.
+hekate-core = "=0.33.0"
+hekate-crypto = "=0.33.0"
+hekate-keccak = "=0.6.0"
+hekate-math = { version = "=0.10.0", features = ["table-math"] }
+hekate-program = "=0.33.0"
+hekate-prover-sys = { version = "=0.33.0", features = ["public"] }
+hekate-sdk = "=0.33.0"
+hekate-verifier = { version = "=0.33.0", features = ["table-math"] }
+rand = "0.9" # TryRngCore/OsRng::try_fill_bytes; the root workspace is on 0.8
+
+# Not workspace-inherited (this crate is excluded); keep aligned with root.
+clap = { version = "4.5", features = ["derive", "env"] }
+criterion = "0.5"
+utils = { path = "../utils" }
+
+[[bench]]
+name = "keccak"
+harness = false
+
+[[bin]]
+name = "keccak_mem_hekate"
+path = "src/bin/keccak_mem.rs"

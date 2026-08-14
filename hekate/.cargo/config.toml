@@ -1,0 +1,4 @@
+# The harness compiles the RAM binary here but runs ../target/release/;
+# without the redirect those are different files and RAM numbers go stale.
+[build]
+target-dir = "../target"
