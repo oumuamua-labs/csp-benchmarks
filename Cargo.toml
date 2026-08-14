@@ -22,6 +22,10 @@ exclude = [
     # cannot satisfy both versions.
     "binius64",
     "cairo-m",
+    # hekate-prover-sys verifies its cdylib signature with ml-dsa, whose
+    # shake dependency needs keccak 0.2.0; unresolvable next to ProveKit's
+    # keccak =0.2.0-rc.2 pin (same conflict as binius64).
+    "hekate",
     "nexus",
     "rookie-numbers",
     "stark-v",
