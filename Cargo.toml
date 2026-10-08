@@ -2,7 +2,6 @@
 resolver = "3"
 members = [
     "plonky2",
-    "openvm",
     "provekit",
     "provekit-groth16",
     "polyhedra-expander",
@@ -11,7 +10,6 @@ members = [
     "jolt",
     "miden",
     "risc0",
-    "sp1",
     "spartan2",
     "flock",
     "utils",
@@ -27,7 +25,6 @@ exclude = [
     # shake dependency needs keccak 0.2.0; unresolvable next to ProveKit's
     # keccak =0.2.0-rc.2 pin (same conflict as binius64).
     "hekate",
-    "nexus",
     "rookie-numbers",
     "stark-v",
 ]

@@ -66,7 +66,9 @@ mod tests {
         let inputs = build_circuit_input(&digest, r, encoded_key.y().unwrap(), &signature_bytes);
         let input_json = serde_json::to_string(&inputs).unwrap();
 
-        let witness = ecdsa_32_witness(&input_json).expect("zero prehash must have a witness");
+        let witness = crate::on_witness_stack(move || {
+            ecdsa_32_witness(&input_json).expect("zero prehash must have a witness")
+        });
         assert!(!witness.is_empty());
     }
 }
