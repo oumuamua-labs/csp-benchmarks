@@ -2,20 +2,20 @@
 
 > ### This is a fork, and the Hekate numbers in it are not official results
 >
-> This fork adds a [Hekate](https://github.com/oumuamua-labs/hekate) Keccak-256 benchmark
-> (`hekate/`) that upstream does not carry. Upstream accepts only fully open-source systems and
-> Hekate's prover ships as a closed-source signed cdylib, which is why it isn't upstream. That is
-> the reason it lives here rather than there, and it is not a claim that upstream got anything
-> wrong.
+> This fork adds [Hekate](https://github.com/oumuamua-labs/hekate) Keccak-256 and SHA-256
+> benchmarks (`hekate/`) that upstream does not carry. Upstream accepts only fully open-source
+> systems and Hekate's prover ships as a closed-source signed cdylib, which is why it isn't
+> upstream. That is the reason it lives here rather than there, and it is not a claim that
+> upstream got anything wrong.
 >
-> **The measurements in [`hekate/RESULTS.md`](hekate/RESULTS.md) were taken on an Apple M3 Max
-> (16 cores, 48 GB).** The official results described below and published on ethproofs.org were
-> taken on an AWS `mac2.metal`: Apple M1, 8 cores, 16 GB. **The two sets are not comparable and
-> must not be merged.** Nothing in `results/` was produced by this fork.
+> Those measurements were taken on an Apple M3 Max (16 cores, 48 GiB). The official results
+> described below and published on ethproofs.org were taken on an AWS `mac2.metal`: Apple M1,
+> 8 cores, 16 GB. The two sets are not comparable and must not be merged. Nothing in
+> `results/` was produced by this fork.
 >
 > Everything else in this repository is upstream's work, unmodified except for registering the
-> new crate. See [`hekate/README.md`](hekate/README.md) for what is measured, how to reproduce
-> it, and where the methodology is checkable.
+> new crate. [`hekate/README.md`](hekate/README.md) carries the numbers, what is measured, how to
+> reproduce it, and where the methodology is checkable.
 
 This repository contains benchmarks of zero-knowledge proving systems and zkVMs. The goal is to _continuously_ map the
 landscape of proving systems that are suitable for client-side environments.
@@ -56,12 +56,21 @@ Our future plans include running the benchmarks in a cloud device farm (Android 
 
 ## How you can run benchmarks locally
 
-1.  **Install the prerequisites**
-    - Install Rust via `rustup` together with the toolchains used in [CI](./.github/workflows/rust_benchmarks_parallel.yml): `nightly-2026-03-04` (default), `1.97.1` for `binius64`, and `nightly-2025-04-06` for `cairo-m`. Add the `llvm-tools`, `rustc-dev`, `rustfmt`, and `clippy` components so `cargo bench` matches the workflow in `.github/workflows/rust_benchmarks_parallel.yml`.
-    - Ensure `cargo`, `cmake`, and a recent `clang`/`lld` are available (the helper actions under [`.github/actions/install-llvm`](./.github/actions/install-llvm) show the expected setup). Install Homebrew packages `bash`, `jq`, and `hyperfine`, plus `/usr/bin/time` for RAM measurements.
-    - Install per-system toolchains as needed: OpenMPI for `polyhedra-expander`, the Ligero prover stack for `ligetron`, Noir version >=1.0.0-beta.13 for `barretenberg`, and the RISC Zero SDK. Each folder documents its own bootstrap script and the matching GitHub Action ([`install-risc0`](./.github/actions/install-risc0), etc.) can be used as a reference.
-2.  **Run the benchmarks**
-    - Build the workspace once: `cargo build --release --workspace`. Rust crates with separate Cargo roots, such as `binius64/`, `cairo-m/`, `rookie-numbers/`, and `stark-v/`, build from inside their own directories.
+1. **Install the prerequisites**
+    - Install Rust via `rustup` together with the toolchains used
+      in [CI](./.github/workflows/rust_benchmarks_parallel.yml): `nightly-2026-03-04` (default), `1.97.1` for
+      `binius64`, and `nightly-2025-04-06` for `cairo-m`. Add the `llvm-tools`, `rustc-dev`, `rustfmt`, and `clippy`
+      components so `cargo bench` matches the workflow in `.github/workflows/rust_benchmarks_parallel.yml`.
+    - Ensure `cargo`, `cmake`, and a recent `clang`/`lld` are available (the helper actions under [
+      `.github/actions/install-llvm`](./.github/actions/install-llvm) show the expected setup). Install Homebrew
+      packages `bash`, `jq`, and `hyperfine`, plus `/usr/bin/time` for RAM measurements.
+    - Install per-system toolchains as needed: OpenMPI for `polyhedra-expander`, the Ligero prover stack for `ligetron`,
+      Noir version >=1.0.0-beta.13 for `barretenberg`, and the RISC Zero SDK. Each folder documents its own bootstrap
+      script and the matching GitHub Action ([`install-risc0`](./.github/actions/install-risc0), etc.) can be used as a
+      reference.
+2. **Run the benchmarks**
+    - Build the workspace once: `cargo build --release --workspace`. Rust crates with separate Cargo roots, such as
+      `binius64/`, `cairo-m/`, `rookie-numbers/`, and `stark-v/`, build from inside their own directories.
     - For Rust crates, run
 
    ```bash
@@ -81,10 +90,10 @@ For example, to run only `risc0` / `sha256` on a self-hosted runner:
 
 1. Open **Actions** -> **Dispatch All Benchmarks (manual)** -> **Run workflow**.
 2. Set:
-   - `benchmark_crate`: `risc0`
-   - `benchmark_target`: `sha256`
-   - `prod-run`: `true`
-   - `run_non_rust`: `false` (optional, keeps this run Rust-only)
+    - `benchmark_crate`: `risc0`
+    - `benchmark_target`: `sha256`
+    - `prod-run`: `true`
+    - `run_non_rust`: `false` (optional, keeps this run Rust-only)
 3. Keep other inputs as needed (`run_all` is ignored when `benchmark_crate` is set).
 
 Notes:
