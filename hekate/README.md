@@ -1,8 +1,9 @@
 # Hekate: Keccak-256 and SHA-256
 
 Hekate verifies a Keccak-256 proof in 3.5 ms and a SHA-256 proof in 3.7 ms, the fastest on this
-board for both hashes, and holds that within 2 ms as the message grows 120x. It proves Keccak-256
-faster than any other system above roughly 91 permutations.
+board for both hashes, and holds that within 2 ms as the message grows 120x. Above roughly 91
+permutations it also proves Keccak-256 faster than flock and binius64, the only other systems
+measured at that size.
 
 These are **not official csp-benchmarks results**. Upstream accepts only fully open-source
 systems, and Hekate's prover is a closed-source signed cdylib. This integration lives on a fork,
@@ -90,8 +91,7 @@ Prove time, ms. Verify, peak RAM and proof size at the same sizes:
 
 **Verify is where Hekate separates.** 3.48 ms at one Keccak permutation and 5.52 ms at 1928, a
 2 ms spread across a 120x instance. binius64 runs 78 to 482 ms over the same span and plonky2 50
-to 336 ms over a 16x SHA-256 span. A verifier whose cost barely moves with the statement is the
-property an onchain consumer pays for.
+to 336 ms over a 16x SHA-256 span.
 
 **Prove splits by size.** flock owns the small end on both hashes: a purpose-built prover with no
 hiding, 9.1 ms at 128 B of Keccak. The two cross between 61 and 121 permutations, near 91
@@ -108,8 +108,10 @@ of 0.106 ms per permutation. binius64's marginal cost is 0.573.
 SHA-256 and 751 KB for Keccak. plonky2 persists 327 MB, a 510x difference in what a deployment
 carries between runs.
 
-**RAM is the binary-field divide.** Hekate peaks at 238 MiB on a 256 KiB Keccak message where
-binius64 reaches 5.8 GiB, 24x more, on the same field and the same class of commitment.
+**RAM.** Hekate peaks at 238 MiB on a 256 KiB Keccak message where binius64 reaches 5.8 GiB,
+24x more, both over GF(2^128). Hekate commits with a Brakedown-style linear code, a Reed-Solomon
+row code over the additive-FFT subspace chain with a Merkle tree over the encoded columns.
+binius64 folds with FRI (`crates/iop/src/fri`), committing a layer per round.
 
 ## What is being proven
 
@@ -185,9 +187,10 @@ compares different guarantees.
   omission is the better precedent.
 
 The Keccak construction injects the Keccak-f[1600] chiplet AIR into the main trace, 28 CPU link
-columns plus 28 physical chiplet columns, virtually expanded to 1687, giving one commitment and
-one merged ZeroCheck. Hekate supports a separate-trace form through `chiplet_defs()`; this
-benchmark uses `inline_chiplets()`.
+columns plus 28 physical chiplet columns, virtually expanded to 1687, giving one table and one
+merged ZeroCheck. Hekate supports a separate-trace form through `chiplet_defs()`; this benchmark
+uses `inline_chiplets()`. Since 0.37 a commitment pool puts every table under one tree per
+oracle. The inline form's remaining advantage is the single merged ZeroCheck.
 
 ## Building and running
 
